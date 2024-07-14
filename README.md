@@ -38,5 +38,3 @@ $ yarn run typeorm:run
 $ yarn stop
 ```
 
-- Default account to login in local
-
