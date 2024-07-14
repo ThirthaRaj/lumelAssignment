@@ -87,7 +87,6 @@ export class FileUploadService {
             );
           } 
         } catch (error) {
-          console.error(error);
           throw new Error(
             'Error importing order details into database'
           );
