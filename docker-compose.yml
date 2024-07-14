@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  database:
+    image: postgres:latest
+    env_file:
+      - .env
+    ports:
+      - '${DATABASE_PORT_NUMBER}:${DATABASE_PORT_NUMBER}'
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_DB: ${DATABASE_NAME}
+    container_name: database
+    command: -p ${DATABASE_PORT_NUMBER}
