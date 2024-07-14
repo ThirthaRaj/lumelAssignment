@@ -26,6 +26,12 @@ $ docker-compose up
 $ yarn start
 ```
 
+- Generate migration
+
+```
+$ yarn run typeorm:run
+```
+
 - Stop application
 
 ```
