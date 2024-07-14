@@ -7,7 +7,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 What things you need to install the software and how to install them
 
-- Node.js version 14
+- Node.js version 16 and above
 - Docker version 18.09.2 or higher ([Installation Guide](https://www.docker.com/products/docker-desktop))
 - Git ([Installation Guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
 
