@@ -20,11 +20,11 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node --require tsconfig-paths/register ./node_modules/typeorm/cli",
-    "typeorm:run": "npm run typeorm migration:run -- -d ./src/database/config.ts",
-    "typeorm:generate": "npm run typeorm -- -d ./src/database/config.ts migration:generate ./src/database/migrations/%npm_config_name%",
-    "typeorm:create": "npm run typeorm -- migration:create ./src/database/migrations/$npm_config_name",
-    "typeorm:revert": "npm run typeorm -- -d src/database/config.ts migration:revert",
-    "typeorm:show": "npm run typeorm -- migration:show -d src/database/config.ts"
+    "typeorm:run": "yarn run typeorm migration:run -- -d ./src/database/config.ts",
+    "typeorm:generate": "yarn run typeorm -- -d ./src/database/config.ts migration:generate ./src/database/migrations/%npm_config_name%",
+    "typeorm:create": "yarn run typeorm -- migration:create ./src/database/migrations/$npm_config_name",
+    "typeorm:revert": "yarn run typeorm -- -d src/database/config.ts migration:revert",
+    "typeorm:show": "yarn run typeorm -- migration:show -d src/database/config.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.10",

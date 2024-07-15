@@ -17,19 +17,22 @@ What things you need to install the software and how to install them
 - Run database docker
 
 ```
+In separate terminal
 $ docker-compose up
-```
-
-- Run application
-
-```
-$ yarn start
 ```
 
 - Generate migration
 
 ```
+Update migrations: ['src/database/migrations/*.ts'] inside config.ts inside database folder,
 $ yarn run typeorm:run
+```
+
+- Run application
+
+```
+Update migrations: ['dist/database/migrations/*.js'] inside config.ts inside database folder,
+$ yarn start
 ```
 
 - Stop application
