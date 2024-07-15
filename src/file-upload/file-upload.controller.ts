@@ -30,7 +30,7 @@ export class FileUploadController {
         ]
       })) file: Express.Multer.File) {
           try {
-            await this.fileUploadService.importOrderDetails(file)
+            return await this.fileUploadService.importOrderDetails(file)
           } catch (error) {
               Logger.error('Error in importing orders')
               throw new Error(error)

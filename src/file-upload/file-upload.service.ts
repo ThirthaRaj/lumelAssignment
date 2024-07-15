@@ -10,16 +10,21 @@ import { Repository } from 'typeorm';
 export class FileUploadService {
     constructor(
         @InjectRepository(CustomerEntity)
-        private readonly customerEntity: Repository<CustomerEntity>,
+        private readonly customerRepository: Repository<CustomerEntity>,
         @InjectRepository(ProductEntity)
-        private readonly productEntity: Repository<
+        private readonly productRepository: Repository<
         ProductEntity
         >,
         @InjectRepository(OrderEntity)
-        private readonly orderEntity: Repository<
+        private readonly orderRepository: Repository<
         OrderEntity
         >
     ) {}
+
+    /**
+     * 
+     * @param file 
+     */
     async importOrderDetails(file: any) {
         try {
           if (file?.mimetype === 'text/csv') {
@@ -42,16 +47,18 @@ export class FileUploadService {
                 const productData = [];
                 const customerData = [];
                 let updatedRows: string[] = rows.map((row,index) => {
-                    
+                  
                     // Push orders data
                     orderData.push({
+                        id: row['Order Id'] || Math.floor(Math.random()*100000),
                         productId: row['Product ID'],
                         customerId: row['Customer ID'],
-                        id: Math.floor(Math.random()*100000),
                         dateOfSale: row['Date of Sale'],
-                        unitPrice: row['Unit Price'],
-                        shippingCost: row['Shipping Cost'],
+                        discount: parseInt(row['Discount']) || 0,
+                        unitPrice: parseInt(row['Unit Price']) || 0,
+                        shipingCost: parseInt(row['Shipping Cost']) || 0,
                         paymentMethod: row['Payment Method']
+
                     })
 
                     // Push product data
@@ -66,18 +73,44 @@ export class FileUploadService {
                         id : row['Customer ID'],
                         customerName: row['Customer Name'],
                         email: row['Customer Email'],
-                        address: row['Customer Address']
+                        customerAddress: row['Customer Address'] || '',
+                        region: row['Region'] || '',
                     })
                 });
 
                 try {
 
-                   // Handle duplicates
-                    await this.productEntity.insert(productData)
-                    await this.orderEntity.insert(orderData);
-                    await this.customerEntity.insert(customerData)
+                   // Insert or update products
+                   await this.productRepository
+                   .createQueryBuilder()
+                   .insert()
+                   .orIgnore(true)
+                   .into(ProductEntity)
+                   .values(productData)
+                   .orUpdate({ conflict_target: ['id'] })
+                   .execute();
+
+                   // Insert or update customers
+                   await this.customerRepository
+                   .createQueryBuilder()
+                   .insert()
+                   .orIgnore(true)
+                   .into(CustomerEntity)
+                   .values(customerData)
+                   .orUpdate({ conflict_target: ['id'] })
+                   .execute();
+
+                   // Insert or update Orders
+                   await this.orderRepository
+                   .createQueryBuilder()
+                   .insert()
+                   .orIgnore(true)
+                   .into(OrderEntity)
+                   .values(orderData)
+                   .orUpdate({ conflict_target: ['id'] })
+                   .execute();
                 } catch (error) {
-                    Logger.warn('Error while bulk insert')
+                    Logger.warn('Error while bulk insert', error)
                 }
 
                 return {
@@ -85,8 +118,14 @@ export class FileUploadService {
                 }
               }
             );
-          } 
+          }  else {
+            Logger.log('Unsupported file format, Please user CSV files')
+            throw new Error(
+              'Unsupported file format, Please user CSV files'
+            );
+          }
         } catch (error) {
+          Logger.error('Error importing order details into database')
           throw new Error(
             'Error importing order details into database'
           );
