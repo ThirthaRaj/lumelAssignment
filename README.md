@@ -32,6 +32,7 @@ $ yarn run typeorm:run
 
 ```
 Update migrations: ['dist/database/migrations/*.js'] inside config.ts inside database folder,
+$ yarn install
 $ yarn start
 ```
 
