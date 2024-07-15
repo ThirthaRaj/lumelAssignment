@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { CustomerEntity } from './customer.entity';
+import { ProductEntity } from './product.entity';
 
 @Entity({ name: 'orders' })
 export class OrderEntity {
@@ -8,16 +10,28 @@ export class OrderEntity {
   @Column()
   dateOfSale: Date;
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column()
   unitPrice: number;
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column()
   discount: number;
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column()
   shipingCost: number;
 
   @Column()
   paymentMethod: string;
+
+  @Column()
+  customerId: string;
+
+  @Column()
+  productId: string;
+
+  @ManyToOne((type) => CustomerEntity, (customer) => customer.orders)
+  customer: CustomerEntity;
+
+  @ManyToOne((type) => ProductEntity, (product) => product.orders)
+  product: ProductEntity;
 
 }
